@@ -30,7 +30,7 @@ class Chip:
                 incrementedPlace = check
                 for nextCheck in [incrementedPlace+1, incrementedPlace+7, incrementedPlace+8, incrementedPlace+9, incrementedPlace-1, incrementedPlace-7, incrementedPlace-8, incrementedPlace-9]:
                     if allChips.get(nextCheck) == color:
-                        toChange.append(nextCheck)
+                        toChange.append(nextCheck) 
                         incrementedPlace = nextCheck
                         print("phew!")
                         print(toChange)
