@@ -1,10 +1,9 @@
 from tkinter import *
-from othelloMain import *
 
-class Chip(Main):
+class Chip:
     
     global allChips, padding
-    allChips = []
+    allChips = {}
     padding = 5
     
     def __init__(self, place, coords, color, canvas):
@@ -16,17 +15,29 @@ class Chip(Main):
         one = float(coords[1])
         two = float(coords[2])
         three = float(coords[3])
-        place = canvas.create_oval(zero + padding, one + padding, two - padding, three - padding, fill = Chip.setColor(color))
-        allChips.append(place)
+        placedChip = canvas.create_oval(zero + padding, one + padding, two - padding, three - padding, fill = self.color, outline = "", tags = (str(place), "aChip"))
+        Chip.updateColors(self, color, place, canvas)
+        allChips[place] = color
     
-    def setColor(self, color):
-        if ("black" in color):
-            self.color = "#FFFFFF"
-        elif ("white" in color):
-            self.color = "#000000" 
-        print(self.color)           
-
-    def updateColors(self):
+    def updateColors(self, color, place, canvas):
         #check all colors around it, change their colors
+        oppositeColor = "black"
+        if color == "black":
+            oppositeColor = "white"         
+        toChange = []
+        for check in [place+1, place+7, place+8, place+9, place-1, place-7, place-8, place-9]:
+            if allChips.get(check) == oppositeColor:
+                incrementedPlace = check
+                for nextCheck in [incrementedPlace+1, incrementedPlace+7, incrementedPlace+8, incrementedPlace+9, incrementedPlace-1, incrementedPlace-7, incrementedPlace-8, incrementedPlace-9]:
+                    if allChips.get(nextCheck) == color:
+                        toChange.append(nextCheck)
+                        incrementedPlace = nextCheck
+                        print("phew!")
+                        print(toChange)
+                    elif allChips.get(nextCheck) == oppositeColor:
+                        for changing in canvas.find_withtag(toChange):
+                            if canvas.find_withtag("aChip") == changing:
+                                canvas.itemconfig(changing, fill = oppositeColor)
+                                print("changed!")
         print("done")
 
